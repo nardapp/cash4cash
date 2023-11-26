@@ -11,6 +11,8 @@
     "statusBar.foreground": "#000000",
     "statusBar.debuggingBackground": "#2d6d9e",
     "statusBar.debuggingForeground": "#000000",
-    "tab.activeBorder": "#2d6d9e"
+    "tab.activeBorder": "#2d6d9e",
+    "iLoveWorkSpaceColors": true,
+    "iLoveWorkSpaceRandom": false
   }
 }
