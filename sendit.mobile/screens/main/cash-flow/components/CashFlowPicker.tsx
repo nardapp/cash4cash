@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import Toggle from "react-native-toggle-element";
+import Toggle from 'react-native-toggle-element';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { SendCashComponent } from './SendCashComponent';
 import { RequestCashComponent } from './RequestCashComponent';
@@ -8,39 +8,53 @@ import { recipientList } from '../../data';
 
 export function CashFlowPicker({ onCloseModal }) {
     const [isSelling, setIsSelling] = useState(false);
+    const [parentViewWidth, setParentViewWidth] = useState(350);
+    const parentViewRef = useRef<View>();
 
     const [recipientIsOpen, setRecipientIsOpen] = useState(false);
     const [recipientValueSelected, setRecipientValueSelected] = useState<string>(recipientList[2].value);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (parentViewRef.current) {
+                parentViewRef.current.measure((x, y, width) => {
+                    if (width)
+                        setParentViewWidth(width);
+                });
+            }
+        }, 100);
+        return () => clearTimeout(timer);
+    }, [parentViewRef]);
 
     const onApplyButtonClick = () => {
         onCloseModal();
     }
 
     return (
-        <View style={styles.content}>
+        <View ref={parentViewRef} style={styles.content}>
             <Toggle
                 value={isSelling}
                 onPress={(newState) => setIsSelling(newState)}
                 thumbButton={{
-                    width: 170,
+                    width: parentViewWidth / 2,
                     height: 40,
                     radius: 5,
                     activeBackgroundColor: '#f57c71',
                     inActiveBackgroundColor: '#add88d',
                 }}
                 trackBar={{
-                    width: 350,
+                    width: parentViewWidth,
                     height: 40,
                     radius: 5,
                     borderWidth: 1,
-                    activeBackgroundColor: "#ddd3",
-                    inActiveBackgroundColor: "#ddd3",
+                    activeBackgroundColor: '#ddd3',
+                    inActiveBackgroundColor: '#ddd3',
                 }}
                 containerStyle={{
                     marginBottom: 20
                 }}
                 trackBarStyle={{
-                    borderColor: "#ccc2",
+                    borderColor: '#ccc2',
                 }}
                 leftComponent={
                     <Text style={{ fontWeight: 'bold', color: isSelling ? '#888' : '#000' }}>Send cash {isSelling ? '' : 'for'}</Text>
@@ -79,7 +93,7 @@ export function CashFlowPicker({ onCloseModal }) {
                             backgroundColor: '#fff6',
                             borderColor: '#cccc',
                         }}
-                        searchContainerStyle={{ borderBottomColor: "#ccc6" }}
+                        searchContainerStyle={{ borderBottomColor: '#ccc6' }}
                     />
                 </View>
 

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { SmartContract, Web3Button, useContract, useContractWrite } from '@thirdweb-dev/react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { LocationObjectCoords } from 'expo-location';
 import { CourierModel, courierList, recipientList } from '../../data';
 import { BottomModalComponent } from '@/components';
 import { OrdersABI } from '@/services/abi/orders';
+import { CourierItemComponent } from './CourierItem.component';
 
 
 const CONTRACT_ADDRESS = process.env.EXPO_PUBLIC_CONTRACT_ADDRESS;
@@ -68,73 +68,7 @@ export function LookingCourierComponent({ isVisible, onClose, location }: {
                                 marginBottom: 30,
                             }}>Looking for exchangers</Text>}
 
-                        {couriers.map(courier =>
-                            <View key={courier.value} style={{
-                                flexDirection: 'row',
-                                alignContent: 'flex-start',
-                                backgroundColor: '#eee9',
-                                borderColor: '#bbb5',
-                                marginVertical: 10,
-                                borderWidth: 1,
-                                borderRadius: 5,
-                                padding: 10
-                            }}>
-                                <Image source={courier.icon} style={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: 20,
-                                    borderWidth: 1,
-                                    borderColor: '#bbb8',
-                                    shadowColor: "#000",
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 2,
-                                    },
-                                    shadowOpacity: 0.25,
-                                    shadowRadius: 3.84,
-                                }} />
-                                <View style={{ marginHorizontal: 10, flexGrow: 1, justifyContent: 'center' }}>
-                                    <Text>{courier.label}</Text>
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: '#666',
-                                        letterSpacing: 0.5,
-                                    }}>Rate: {courier.rate}</Text>
-                                    <Text style={{
-                                        fontSize: 14,
-                                        color: '#666',
-                                        fontWeight: '600',
-                                        letterSpacing: 0.5,
-                                    }}>{(courier.rate * 100).toFixed(2)} $ CAD</Text>
-                                </View>
-                                <Web3Button
-                                    theme={'dark'}
-                                    contractAddress={CONTRACT_ADDRESS}
-                                    contractAbi={OrdersABI}
-                                    action={(contract: SmartContract) => onAcceptButtonClick(contract, courier)}
-                                    onSuccess={onSuccessAccept}
-                                    onError={onErrorAccept}
-                                >
-                                    Accept
-                                </Web3Button>
-                                {/* <TouchableOpacity style={{
-                                    backgroundColor: '#add88d',
-                                    justifyContent: 'center',
-                                    paddingHorizontal: 14,
-                                    borderColor: "#ccc9",
-                                    borderRadius: 5,
-                                    borderWidth: 1,
-                                    elevation: 5,
-                                }} onPress={() => onSuccessAccept()}>
-                                    <Text style={{
-                                        letterSpacing: 0.5,
-                                        fontWeight: '600',
-                                        color: 'black',
-                                    }}>Accept</Text>
-                                </TouchableOpacity> */}
-
-
-                            </View>)}
+                        {couriers.map(courier => <CourierItemComponent key={courier.address} courier={courier} />)}
                     </View>
 
 
