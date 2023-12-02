@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { AntDesign, FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { AntDesign, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 
 import { NavigationPaths } from '@/navigation';
@@ -29,7 +29,7 @@ export function MainTabRoutes() {
                 tabBarHideOnKeyboard: true,
                 tabBarActiveTintColor: 'black',
                 tabBarInactiveTintColor: 'gray',
-                tabBarBackground: () => <BlurView tint="light" intensity={50} style={StyleSheet.absoluteFill} />,
+                tabBarBackground: () => <BlurView tint='light' intensity={50} style={StyleSheet.absoluteFill} />,
                 tabBarStyle: {
                     backgroundColor: 'transparent',
                     position: 'absolute',
@@ -54,7 +54,7 @@ export function MainTabRoutes() {
                 component={MainTabCashFlowComponent}
                 options={{
                     title: 'Send & Receive',
-                    tabBarIcon: ({ focused }) => <AntDesign name="swap" size={24} color={focused ? 'black' : 'grey'} />
+                    tabBarIcon: ({ focused }) => <AntDesign name='swap' size={24} color={focused ? 'black' : 'grey'} />
                 }}
             />
 
@@ -63,7 +63,7 @@ export function MainTabRoutes() {
                 component={MainTabSwapComponent}
                 options={{
                     title: 'Swap',
-                    tabBarIcon: ({ focused }) => <FontAwesome5 name="coins" size={24} color={focused ? 'black' : 'grey'} />
+                    tabBarIcon: ({ focused }) => <FontAwesome5 name='coins' size={24} color={focused ? 'black' : 'grey'} />
                 }}
             />
 
@@ -72,7 +72,7 @@ export function MainTabRoutes() {
                 component={MainTabTreasuryComponent}
                 options={{
                     title: 'Borrow & Lend',
-                    tabBarIcon: ({ focused }) => <AntDesign name="bank" size={24} color={focused ? 'black' : 'grey'} />
+                    tabBarIcon: ({ focused }) => <MaterialCommunityIcons name='bank-transfer' size={24} color={focused ? 'black' : 'grey'} />
                 }}
             />
 
@@ -81,7 +81,7 @@ export function MainTabRoutes() {
                 component={MainTabChatComponent}
                 options={{
                     title: 'Chats',
-                    tabBarIcon: ({ focused }) => <Ionicons name="chatbubbles-outline" size={24} color={focused ? 'black' : 'grey'} />
+                    tabBarIcon: ({ focused }) => <Ionicons name='chatbubbles-outline' size={24} color={focused ? 'black' : 'grey'} />
                 }}
             />
 
@@ -99,7 +99,7 @@ function MainTabCashFlowComponent() {
                 title: 'Send It!',
                 headerTransparent: true,
                 headerBackground: () => (
-                    <BlurView tint="light" intensity={10} style={StyleSheet.absoluteFill} />
+                    <BlurView tint='light' intensity={10} style={StyleSheet.absoluteFill} />
                 ),
                 headerLeft: () => (<MenuIcon />),
                 headerRight: () => <UserHeaderComponent />,
