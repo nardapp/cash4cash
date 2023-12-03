@@ -71,6 +71,45 @@ export const courierList: CourierModel[] = [
     },
 ];
 
+export const networks = [
+    {
+        label: 'Polygon Mumbai',
+        value: 'tMATIC',
+        twAsset: 'polygonmumbai',
+        icon: () => <Image source={{ uri: `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygonmumbai/info/logo.png` }} style={{ width: 20, height: 20 }} />,
+        isTestnet: true
+    },
+    {
+        label: 'Sepolia Testnet',
+        value: 'ETH',
+        twAsset: 'sepolia',
+        icon: () => <Image source={{ uri: `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/sepolia/info/logo.png` }} style={{ width: 20, height: 20 }} />,
+        isTestnet: true
+    },
+    {
+        label: 'Avalanche C-Chain Fuji',
+        value: 'tAVAX',
+        twAsset: 'avalanchecfuji',
+        icon: () => <Image source={{ uri: `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchecfuji/info/logo.png` }} style={{ width: 20, height: 20 }} />,
+        isTestnet: true
+    },
+    // {
+    //     label: 'Ethereum',
+    //     value: 'ETH',
+    //     twAsset: 'ethereum'
+    // },
+    // {
+    //     label: 'BNB Smart Chain',
+    //     value: 'BNB',
+    //     twAsset: 'smartchain'
+    // },
+    // {
+    //     label: 'Avalanche C-Chain',
+    //     value: 'AVAX',
+    //     twAsset: 'avalanchec'
+    // }
+];
+
 export const cryptoList = [
     {
         label: 'USDT',

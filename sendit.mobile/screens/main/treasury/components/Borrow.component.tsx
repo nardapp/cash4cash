@@ -1,13 +1,40 @@
-import { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
-import { MaterialCommunityIcons, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 import { BottomModalComponent } from '@/components';
 
-import { cryptoList, recipientList } from '../../data';
+import { BorrowAddComponent } from './BorrowAdd.component';
 
 const borrows = [
+    {
+        status: 'rejected',
+        date: new Date(2021, 5, 20),
+        amount: 1000,
+        apy: 3,
+        lenders: [
+            {
+                name: 'John',
+                amount: 1000
+            }
+        ]
+    },
+    {
+        status: 'requested',
+        date: new Date(2021, 5, 20),
+        amount: 1000,
+        apy: 3,
+        lenders: [
+            {
+                name: 'John',
+                amount: 500
+            },
+            {
+                name: 'Peter',
+                amount: 500
+            }
+        ]
+    },
     {
         date: new Date(2024, 3, 10),
         amount: 1000,
@@ -38,151 +65,17 @@ const borrows = [
     }
 ];
 
-export function BorrowComponent() {
+export function BorrowComponent({ onChangeBlurBackground }: { onChangeBlurBackground: (value: boolean) => void }) {
     const [isBorrowModalVisible, setIsBorrowModalVisible] = useState(false);
 
-    const [cryptoIsOpen, setCryptoIsOpen] = useState(false);
-    const [cryptoValueSelected, setCryptoValueSelected] = useState<string>(cryptoList[0].value);
-
-    const [borrowers, setBorrowers] = useState([]);
-    const [recipientIsOpen, setRecipientIsOpen] = useState(false);
-    const [recipientValueSelected, setRecipientValueSelected] = useState<string>();
+    useEffect(() => {
+        onChangeBlurBackground(isBorrowModalVisible);
+    }, [isBorrowModalVisible]);
 
     return (
         <View style={styles.wrapper}>
             <BottomModalComponent title='Borrow' isVisible={isBorrowModalVisible} onClose={() => setIsBorrowModalVisible(false)} titleAlign='left' blurIntensity={90}>
-                <View style={stylesModal.content}>
-                    <Text style={stylesModal.title}>What do you need?</Text>
-
-                    <DropDownPicker
-                        searchable={true}
-                        open={cryptoIsOpen}
-                        value={cryptoValueSelected}
-                        items={cryptoList}
-                        setOpen={setCryptoIsOpen}
-                        setValue={setCryptoValueSelected}
-                        placeholder='Crypto'
-                        searchPlaceholder='Search...'
-                        listMode='MODAL'
-                        modalProps={{
-                            animationType: 'slide'
-                        }}
-                        style={stylesModal.cryptoDropDown}
-                        textStyle={{
-                            letterSpacing: 0.75,
-                            fontWeight: '500'
-                        }}
-                        searchTextInputStyle={{
-                            backgroundColor: '#fff6',
-                            borderColor: '#cccc',
-                        }}
-                        searchContainerStyle={{ borderBottomColor: '#ccc6' }}
-                    />
-
-                    <Text style={stylesModal.title}>How much do you need?</Text>
-
-                    <TextInput
-                        style={{
-                            textAlign: 'center',
-                            backgroundColor: '#fffa',
-                            borderColor: '#cccc',
-                            padding: 12,
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            marginRight: 8,
-                            height: 40
-                        }}
-                        keyboardType='numeric'
-                        returnKeyType='done'
-                        //onChangeText={(text) => setTokenAmount(Number.parseFloat(text))}
-                        //value={tokenAmount.toString()}
-                        maxLength={10}
-                    />
-
-
-                    <Text style={stylesModal.title}>Collective Collateral</Text>
-
-                    <DropDownPicker
-                        searchable={true}
-                        open={recipientIsOpen}
-                        value={recipientValueSelected}
-                        items={recipientList}
-                        setOpen={setRecipientIsOpen}
-                        setValue={setRecipientValueSelected}
-                        onChangeValue={(value) => {
-                            const recipient = recipientList.find(p => p.value === value);
-                            if (!borrowers.includes(recipient)) {
-                                setBorrowers([...borrowers, recipient]);
-                            }
-                        }}
-                        placeholder='Collaterals'
-                        searchPlaceholder='Search...'
-                        listMode='MODAL'
-                        modalProps={{
-                            animationType: 'slide'
-                        }}
-                        style={{
-                            backgroundColor: '#fffa',
-                            borderColor: '#cccc',
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            minHeight: 40,
-                        }}
-                        textStyle={{
-                            letterSpacing: 0.75,
-                            fontWeight: '500'
-                        }}
-                        searchTextInputStyle={{
-                            backgroundColor: '#fff6',
-                            borderColor: '#cccc',
-                        }}
-                        searchContainerStyle={{ borderBottomColor: '#ccc6' }}
-                    />
-
-                    {borrowers.map(b => <View key={b.value} style={{
-                        marginVertical: 10,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                    }}>
-                        <Text style={{
-                            flexGrow: 1
-                        }}>{b.label}</Text>
-                        <TextInput
-                            style={{
-                                flexGrow: 1,
-                                textAlign: 'center',
-                                backgroundColor: '#fffa',
-                                borderColor: '#cccc',
-                                padding: 12,
-                                borderRadius: 5,
-                                borderWidth: 1,
-                                height: 40
-                            }}
-                            returnKeyType='done'
-                            //onChangeText={(text) => setTokenAmount(Number.parseFloat(text))}
-                            //value={tokenAmount.toString()}
-                            maxLength={10}
-                        />
-                        <TouchableOpacity style={{
-                            //width: 40,
-                            padding: 8,
-                            marginLeft: 10,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: 'black',
-                            borderRadius: 5,
-                            elevation: 5,
-                        }} onPress={() => { }}>
-                            <AntDesign name='deleteuser' size={24} color='white' />
-                        </TouchableOpacity>
-
-                    </View>)}
-
-                    <TouchableOpacity style={stylesModal.applyButton} onPress={() => setIsBorrowModalVisible(false)}>
-                        <Text style={stylesModal.applyButtonText}>Request</Text>
-                    </TouchableOpacity>
-
-                </View>
+                <BorrowAddComponent />
             </BottomModalComponent>
 
             <View style={styles.header}>
@@ -223,12 +116,12 @@ export function BorrowComponent() {
                         <View style={{ flex: 1 }}>
                             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{b.amount} USDT</Text>
                             <Text style={{ color: 'grey' }}>
-                                {b.date.toLocaleDateString()}
+                                {b.date?.toLocaleDateString()}
                                 <Text style={{ fontSize: 18, fontWeight: 'bold' }}> · </Text>
                                 {b.apy}% APY
                             </Text>
-                            {!!b.lenders.length && <Text style={{ color: 'grey' }}>
-                                {b.lenders.length} lenders
+                            {!!b.lenders?.length && <Text style={{ color: 'grey' }}>
+                                {b.lenders?.length} lenders
                             </Text>}
                         </View>
                         <Text style={{ color: 'grey' }}>{b.status}</Text>
@@ -253,6 +146,7 @@ export function BorrowComponent() {
 
 const styles = StyleSheet.create({
     wrapper: {
+        margin: 12,
         backgroundColor: '#000',
         borderRadius: 20,
     },
@@ -323,40 +217,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         letterSpacing: 0.75,
-        color: 'white',
-    },
-});
-
-const stylesModal = StyleSheet.create({
-    content: {
-
-    },
-    title: {
-        textAlign: 'center',
-        fontSize: 18,
-        fontWeight: 'bold',
-        letterSpacing: 0.75,
-        margin: 20,
-    },
-    cryptoDropDown: {
-        backgroundColor: '#fffa',
-        borderColor: '#cccc',
-        borderRadius: 5,
-        borderWidth: 1,
-        minHeight: 40,
-    },
-
-    applyButton: {
-        marginTop: 40,
-        marginBottom: 20,
-        alignItems: 'center',
-        paddingVertical: 12,
-        borderRadius: 5,
-        backgroundColor: 'black',
-    },
-    applyButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
         color: 'white',
     },
 });

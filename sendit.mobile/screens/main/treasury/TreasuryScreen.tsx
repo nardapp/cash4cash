@@ -1,73 +1,36 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
-import { AntDesign } from '@expo/vector-icons';
-import { BottomModalComponent } from '@/components';
-import { cryptoList, recipientList } from '../data';
-import { BorrowComponent, LendComponent } from './components';
+import { ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DrawerNavigationOptions } from '@react-navigation/drawer';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const borrows = [
-
-];
-
-const loans = [
-
-];
+import { BorrowComponent, LendComponent } from './components';
 
 export function TreasuryScreen() {
     const navigation = useNavigation();
+    const insets = useSafeAreaInsets();
+    const [isBlurBackground, setIsBlurBackground] = useState(false);
 
     useEffect(() => {
         navigation.setOptions({
+            headerShown: false,
             title: '',
         } as DrawerNavigationOptions);
     });
 
-    const [cryptoIsOpen, setCryptoIsOpen] = useState(false);
-    const [cryptoValueSelected, setCryptoValueSelected] = useState<string>(cryptoList[0].value);
-
-    const [borrowers, setBorrowers] = useState([]);
-    const [recipientIsOpen, setRecipientIsOpen] = useState(false);
-    const [recipientValueSelected, setRecipientValueSelected] = useState<string>();
-
-    const cryptoSelected = cryptoList.find(p => p.value === cryptoValueSelected);
-
     return (
-        <View style={styles.wrapper}>
-            <View style={{ marginBottom: 30 }}>
-                <BorrowComponent />
-            </View>
-            <View>
+        <ScrollView>
+            <View style={{ marginTop: insets.top, marginBottom: 100 }}>
+                <BorrowComponent onChangeBlurBackground={(value: boolean) => setIsBlurBackground(value)} />
                 <LendComponent />
             </View>
-        </View>
+
+            {isBlurBackground && <View style={{
+                position: 'absolute',
+                height: '100%',
+                width: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.2)'
+            }} />}
+        </ScrollView>
     )
 };
-
-const styles = StyleSheet.create({
-    wrapper: {
-        padding: 12,
-    },
-
-    centered: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    applyButton: {
-        marginTop: 40,
-        marginBottom: 20,
-        alignItems: 'center',
-        paddingVertical: 12,
-        borderRadius: 5,
-        elevation: 3,
-        backgroundColor: 'black',
-    },
-    applyButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: 'white',
-    },
-});

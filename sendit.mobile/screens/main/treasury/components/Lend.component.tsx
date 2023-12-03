@@ -53,6 +53,7 @@ export function LendComponent() {
 
 const styles = StyleSheet.create({
     wrapper: {
+        margin: 12,
         backgroundColor: '#000',
         borderRadius: 20,
     },
