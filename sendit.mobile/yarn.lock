@@ -5695,10 +5695,10 @@
     prompts "^2.4.0"
     semver "^7.5.2"
 
-"@react-native-community/netinfo@11.1.1":
-  version "11.1.1"
-  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-11.1.1.tgz#b25cb1547a0067460c48c5973ac280c531e59c3b"
-  integrity sha512-AoIcGL7WeXobSxMUz0ukXXCaQgIReR3xLfZJ/GTd3HN/iceuN6UvqAddfjxgqQWMcb6t2SfrjQnbUPfvattp/A==
+"@react-native-community/netinfo@11.2.0":
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-11.2.0.tgz#2f0808ee8559905beed631bc79abd9d88fd9e8b7"
+  integrity sha512-Zpq8/BTBUUI4kito41VUtn/dGQZU1/SCNHvPZkjlUo41Mec38z13ntxeaIC+2LP5Dw0xKpZ/Lql47BZeXk+Ocg==
 
 "@react-native/assets-registry@^0.72.0":
   version "0.72.0"
@@ -6132,13 +6132,13 @@
     "@tanstack/query-core" "4.36.1"
     use-sync-external-store "^1.2.0"
 
-"@thirdweb-dev/auth@4.1.13":
-  version "4.1.13"
-  resolved "https://registry.yarnpkg.com/@thirdweb-dev/auth/-/auth-4.1.13.tgz#1eb35e75fba20a30a4bc9c45ef33ea90317c5a7c"
-  integrity sha512-9NnCJtTEkyjUTH6Jp0lq4kmisct27ixKEo9ueJk3gz6Y8f59xh9h4cqYa1B0kpMckYtNdqYlyjZSsv6142nXzQ==
+"@thirdweb-dev/auth@4.1.14":
+  version "4.1.14"
+  resolved "https://registry.yarnpkg.com/@thirdweb-dev/auth/-/auth-4.1.14.tgz#db3277c90ae3b9c8d4c032b2ca04007ede586df6"
+  integrity sha512-P3uUY2LPYuXIxZGm7/TIlfnrXSDLQx+/X3XHS296jRqtWj7S64mUCkZPaz74jXqdUzIEkI3So23/55IIQmJI8Q==
   dependencies:
     "@fastify/cookie" "^9.1.0"
-    "@thirdweb-dev/wallets" "2.1.10"
+    "@thirdweb-dev/wallets" "2.1.11"
     cookie "^0.5.0"
     fastify-type-provider-zod "^1.1.9"
     uuid "^9.0.1"
@@ -6195,25 +6195,25 @@
     buffer-reverse "^1.0.1"
     treeify "^1.1.0"
 
-"@thirdweb-dev/react-core@4.1.11":
-  version "4.1.11"
-  resolved "https://registry.yarnpkg.com/@thirdweb-dev/react-core/-/react-core-4.1.11.tgz#17377602f70ea44a6e657f3b74b8736ed9e9b74f"
-  integrity sha512-eNUS+hiMlQ2npF30fAPr0d96Z9yIz8XgdeWEj96Z9d/aLdnZkyJGSDZqmHehOMw96Hw/f4V6c1AFpRohuBFf3A==
+"@thirdweb-dev/react-core@4.1.12":
+  version "4.1.12"
+  resolved "https://registry.yarnpkg.com/@thirdweb-dev/react-core/-/react-core-4.1.12.tgz#fe66e11dfdd614384a082254a4c033a0ff45fce4"
+  integrity sha512-tTgTIhK3+I/zeYRXn1EnVhntKPR+wCFk+hrvBoeaFPsdNW25a6CYH7Xy2Teo/NT9WhPytDqpx+MQ6cXE6K5bAA==
   dependencies:
     "@tanstack/react-query" "^4.33.0"
-    "@thirdweb-dev/auth" "4.1.13"
+    "@thirdweb-dev/auth" "4.1.14"
     "@thirdweb-dev/chains" "0.1.60"
     "@thirdweb-dev/generated-abis" "^0.0.1"
-    "@thirdweb-dev/sdk" "4.0.18"
-    "@thirdweb-dev/storage" "2.0.6"
-    "@thirdweb-dev/wallets" "2.1.10"
+    "@thirdweb-dev/sdk" "4.0.19"
+    "@thirdweb-dev/storage" "2.0.7"
+    "@thirdweb-dev/wallets" "2.1.11"
     mime "3.0.0"
     tiny-invariant "^1.2.0"
 
-"@thirdweb-dev/react-native-compat@^0.4.11":
-  version "0.4.11"
-  resolved "https://registry.yarnpkg.com/@thirdweb-dev/react-native-compat/-/react-native-compat-0.4.11.tgz#3e0200c12eca82ded12957e69539e4aeb698d453"
-  integrity sha512-UIpcfJJQh2bMi6TSxIKhRlrVwjtrJQKQmDBcdwRwUv3jsyHGCRMmLGTAG8SOtTibiH2eh2cLUUR7VDdivJpWaQ==
+"@thirdweb-dev/react-native-compat@^0.4.12":
+  version "0.4.12"
+  resolved "https://registry.yarnpkg.com/@thirdweb-dev/react-native-compat/-/react-native-compat-0.4.12.tgz#0ea77b86969358a668c82c94a915536ea242c559"
+  integrity sha512-gEWpOv7XzVhE9VS3CO7SZnqm5cz/+vno5ZawNufUvzZiqFVu4eCSUl/rpfw0LnN6i+5Fyusm3Z9Prs+6T31pAA==
   dependencies:
     "@ethersproject/shims" "^5.7.0"
     "@walletconnect/react-native-compat" "^2.8.6"
@@ -6222,10 +6222,10 @@
     react-native-get-random-values "^1.9.0"
     react-native-url-polyfill "^2.0.0"
 
-"@thirdweb-dev/react-native@^0.4.11":
-  version "0.4.11"
-  resolved "https://registry.yarnpkg.com/@thirdweb-dev/react-native/-/react-native-0.4.11.tgz#01b6420fd162917f360c9ea498c78462e849f2fe"
-  integrity sha512-6P4jGqjyVPtJhuBTs6w8iWcZkQfawd71jqw7bREKYLRWkShecS0J0WhU0Hg2lpQHgTpk+LrEjYGcqnA3HueQNA==
+"@thirdweb-dev/react-native@^0.4.12":
+  version "0.4.12"
+  resolved "https://registry.yarnpkg.com/@thirdweb-dev/react-native/-/react-native-0.4.12.tgz#5e1cb9140802d03194336803d8abc35fc3efb98c"
+  integrity sha512-mHz5+rT2oNSZqicSS2wQ1oj5/3XNDw0S946kzl7PiDQ2zdipv+4+0zr4jZIuGnKt9avM7xylDSFiJ0HalG8HDQ==
   dependencies:
     "@aws-sdk/client-lambda" "3.350.0"
     "@aws-sdk/credential-providers" "3.350.0"
@@ -6236,10 +6236,10 @@
     "@shopify/restyle" "^2.4.2"
     "@tanstack/react-query" "^4.33.0"
     "@thirdweb-dev/chains" "0.1.60"
-    "@thirdweb-dev/react-core" "4.1.11"
-    "@thirdweb-dev/sdk" "4.0.18"
-    "@thirdweb-dev/storage" "2.0.6"
-    "@thirdweb-dev/wallets" "2.1.10"
+    "@thirdweb-dev/react-core" "4.1.12"
+    "@thirdweb-dev/sdk" "4.0.19"
+    "@thirdweb-dev/storage" "2.0.7"
+    "@thirdweb-dev/wallets" "2.1.11"
     abitype "^0.2.5"
     aws-amplify "^5.3.8"
     expo-application "^5.3.0"
@@ -6263,17 +6263,17 @@
     react-native-safe-area-context "4.7.4"
     react-native-webview "12.1.0"
 
-"@thirdweb-dev/sdk@4.0.18":
-  version "4.0.18"
-  resolved "https://registry.yarnpkg.com/@thirdweb-dev/sdk/-/sdk-4.0.18.tgz#39c6bcc03550ec2bdd924655a6b3102b136a41bb"
-  integrity sha512-D4YBSoFnEec+5JMbEt7CQKNvbJPzuqGQH8JutUHdN83T8BdF4BZgRi0iLUqEpal/a+r4QinVFGEZvfSGeAJyeg==
+"@thirdweb-dev/sdk@4.0.19":
+  version "4.0.19"
+  resolved "https://registry.yarnpkg.com/@thirdweb-dev/sdk/-/sdk-4.0.19.tgz#39d526b53551bcd56fab9c56a3be0f676c48a12a"
+  integrity sha512-RmGoYoyK6FGchSsexjRKE7XtnARnUNXcrMTvsCBWxh77elV7Gen/QxQv1WByRv5LHf1PGRgwXDy1uhu46fTE2g==
   dependencies:
     "@thirdweb-dev/chains" "0.1.60"
     "@thirdweb-dev/contracts-js" "1.3.16"
     "@thirdweb-dev/crypto" "0.2.0"
     "@thirdweb-dev/generated-abis" "0.0.1"
     "@thirdweb-dev/merkletree" "0.2.0"
-    "@thirdweb-dev/storage" "2.0.6"
+    "@thirdweb-dev/storage" "2.0.7"
     abitype "^0.2.5"
     bn.js "^5.2.1"
     bs58 "^5.0.0"
@@ -6286,20 +6286,20 @@
     yaml "^2.3.1"
     zod "^3.22.3"
 
-"@thirdweb-dev/storage@2.0.6":
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/@thirdweb-dev/storage/-/storage-2.0.6.tgz#feeb0bdbfc6b314b9ecc47c699154dc33b98c578"
-  integrity sha512-WTGGU0nVHCfhuPtHA4/2Ws8sAYeDgdQTXOAFIDjqiY8Ii1v0FanrrfrVhGmOVZty9oQmlxzSljHTcayM29wk8g==
+"@thirdweb-dev/storage@2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@thirdweb-dev/storage/-/storage-2.0.7.tgz#249b5bb2949156542cc715b5262f8c88dd0370de"
+  integrity sha512-pi+wfUycHWoOVxD+CZtfGprP9+yQ2PgErsYwWbW3/pQtk8uatvGJMPgMNYsiu6G3B1V3xokBfnmCTsONjz+YNw==
   dependencies:
     "@thirdweb-dev/crypto" "0.2.0"
     cid-tool "^3.0.0"
     form-data "^4.0.0"
     uuid "^9.0.1"
 
-"@thirdweb-dev/wallets@2.1.10":
-  version "2.1.10"
-  resolved "https://registry.yarnpkg.com/@thirdweb-dev/wallets/-/wallets-2.1.10.tgz#5f09c142e6e0644fcd45843e6cfe0ea1a3883a0c"
-  integrity sha512-3EPjRLahAJXPcRvKYSSDdhhCROQ8zFhSb2o1cFpCuHPrItSj8tg2R7xWFNQsKRwDE3Tv7QszeD5b6d727PfPzw==
+"@thirdweb-dev/wallets@2.1.11":
+  version "2.1.11"
+  resolved "https://registry.yarnpkg.com/@thirdweb-dev/wallets/-/wallets-2.1.11.tgz#3572583cedb5e20c51f674994a989d865a345116"
+  integrity sha512-1XWYifpi45zFYGnaIqshH4zV5XquvgM20acuP+2RzYIa9BL6SG9WpXGORfyuc39rXVf9FIl5ZUUzdNhDEocw9w==
   dependencies:
     "@account-abstraction/contracts" "^0.5.0"
     "@account-abstraction/sdk" "^0.5.0"
@@ -6319,7 +6319,7 @@
     "@thirdweb-dev/chains" "0.1.60"
     "@thirdweb-dev/contracts-js" "1.3.16"
     "@thirdweb-dev/crypto" "0.2.0"
-    "@thirdweb-dev/sdk" "4.0.18"
+    "@thirdweb-dev/sdk" "4.0.19"
     "@walletconnect/core" "^2.9.1"
     "@walletconnect/ethereum-provider" "^2.9.1"
     "@walletconnect/jsonrpc-utils" "^1.0.8"
@@ -6521,18 +6521,27 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-native@~0.72.7":
-  version "0.72.7"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.72.7.tgz#9479b6f68934a410b7b1b45a77336ae93b3d9a53"
-  integrity sha512-LvxJD7VINBiJVcY9UgUVcmPMPiKGO5jHjPM6JrchfP+z1zx0AENL6UOGng1ueaHTRROMTVxZRzO7WVi6DFrMyw==
+"@types/react-native@~0.72.8":
+  version "0.72.8"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.72.8.tgz#eb6238fab289f5f132f7ccf138bdfe6f21ed93e1"
+  integrity sha512-St6xA7+EoHN5mEYfdWnfYt0e8u6k2FR0P9s2arYgakQGFgU1f9FlPrIEcj0X24pLCF5c5i3WVuLCUdiCYHmOoA==
   dependencies:
     "@react-native/virtualized-lists" "^0.72.4"
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^18.2.39":
+"@types/react@*":
   version "18.2.39"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.39.tgz#744bee99e053ad61fe74eb8b897f3ab5b19a7e25"
   integrity sha512-Oiw+ppED6IremMInLV4HXGbfbG6GyziY3kqAwJYOR0PNbkYDmLWQA3a95EhdSmamsvbkJN96ZNN+YD+fGjzSBA==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
+"@types/react@^18.2.42":
+  version "18.2.42"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.42.tgz#6f6b11a904f6d96dda3c2920328a97011a00aba7"
+  integrity sha512-c1zEr96MjakLYus/wPnuWDo1/zErfdU9rNsIGmE+NV71nx88FG9Ttgo5dqorXTu/LImX2f63WBP986gJkMPNbA==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -12982,10 +12991,10 @@ react-native-screens@~3.27.0:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
 
-react-native-svg@14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-14.0.0.tgz#ea1974dec9a91a09c6a38b7bf58d85e857c291f5"
-  integrity sha512-17W/gWXRUMS7p7PSHu/WyGkZUc1NzRTGxxXc0VqBLjzKSchyb0EmgsiWf9aKmfC6gmY0wcsmKZcGV41bCcNfBA==
+react-native-svg@14.1.0:
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-14.1.0.tgz#7903bddd3c71bf3a8a503918253c839e6edaa724"
+  integrity sha512-HeseElmEk+AXGwFZl3h56s0LtYD9HyGdrpg8yd9QM26X+d7kjETrRQ9vCjtxuT5dCZEIQ5uggU1dQhzasnsCWA==
   dependencies:
     css-select "^5.1.0"
     css-tree "^1.1.3"

@@ -1,201 +1,70 @@
-import { useEffect, useRef, useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
-import { AntDesign } from '@expo/vector-icons';
+import React, { useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Toggle from 'react-native-toggle-element';
 
-import { cryptoList, recipientList, networks } from '../../data';
+import { BorrowAddPersonalComponent } from './BorrowAddPersonal.component';
+import { BorrowAddBusinessComponent } from './BorrowAddBusiness.component';
 
 export function BorrowAddComponent() {
-
-    const [cryptoIsOpen, setCryptoIsOpen] = useState(false);
-    const [cryptoValueSelected, setCryptoValueSelected] = useState<string>(cryptoList[0].value);
-
-    const [networkIsOpen, setNetworkIsOpen] = useState(false);
-    const [networkValueSelected, setNetworkValueSelected] = useState<string>(networks[0].value);
-
-    const [borrowers, setBorrowers] = useState([]);
-    const [recipientIsOpen, setRecipientIsOpen] = useState(false);
-    const [recipientValueSelected, setRecipientValueSelected] = useState<string>();
-
-    const tokenNetworkView = useRef(null);
-    const [tokenNetworkViewWidth, setTokenNetworkViewWidth] = useState(100);
+    const [isBusinessLoan, setIsBusinessLoan] = useState(false);
+    const [parentViewWidth, setParentViewWidth] = useState(350);
+    const parentViewRef = useRef<View>();
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            tokenNetworkView.current?.measure((x, y, width) => width && setTokenNetworkViewWidth(width));
+            if (parentViewRef.current)
+                parentViewRef.current.measure((x, y, width) => {
+                    if (width)
+                        setParentViewWidth(width);
+                });
         }, 100);
         return () => clearTimeout(timer);
-    }, [tokenNetworkView]);
+    }, [parentViewRef]);
 
     return (
         <View style={styles.wrapper}>
-            <View style={styles.content}>
-
-                <View style={{ marginBottom: 20, zIndex: 10 }}>
-                    <View ref={tokenNetworkView} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8, zIndex: 10 }}>
-                        <View style={{ flexGrow: 1 }}>
-                            <DropDownPicker
-                                showTickIcon={false}
-                                open={cryptoIsOpen}
-                                value={cryptoValueSelected}
-                                items={cryptoList}
-                                setOpen={setCryptoIsOpen}
-                                setValue={setCryptoValueSelected}
-                                style={{
-                                    backgroundColor: 'transparent',
-                                    minHeight: 30,
-                                    borderWidth: 0,
-                                }}
-                                containerStyle={{
-                                    width: tokenNetworkViewWidth / 5 * 2,
-                                }}
-                            />
-                        </View>
-                        <View style={{ flexGrow: 1 }}>
-                            <DropDownPicker
-                                showTickIcon={false}
-                                open={networkIsOpen}
-                                value={networkValueSelected}
-                                items={networks}
-                                setOpen={setNetworkIsOpen}
-                                setValue={setNetworkValueSelected}
-                                style={{
-                                    backgroundColor: 'transparent',
-                                    minHeight: 30,
-                                    borderWidth: 0,
-                                }}
-                                containerStyle={{
-                                    width: tokenNetworkViewWidth / 5 * 3,
-                                }}
-                            />
-                        </View>
-                    </View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <TextInput
-                            placeholder='money amount'
-                            style={{
-                                flexGrow: 1,
-                                backgroundColor: '#fffa',
-                                borderColor: '#cccc',
-                                padding: 12,
-                                borderRadius: 5,
-                                borderWidth: 1,
-                                marginRight: 8,
-                                height: 40,
-                            }}
-                            keyboardType='numeric'
-                            returnKeyType='done'
-                            //onChangeText={(text) => setTokenAmount(Number.parseFloat(text))}
-                            //value={tokenAmount.toString()}
-                            maxLength={10}
-                        />
-                    </View>
-                    {false && <View>
-                        <Text style={{ marginTop: 5, color: '#f57c71', fontWeight: '600' }}>Invalid</Text>
-                    </View>}
-                </View>
-
-
-
-
-
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10, zIndex: 9 }}>
-                    <Text style={styles.title}>Collective Collateral</Text>
-                    <TouchableOpacity
-                        style={{
-                            padding: 8,
-                            backgroundColor: 'black',
-                            //borderWidth: 1,
-                            borderRadius: 5,
-                        }}
-                        onPress={() => setRecipientIsOpen(true)}>
-                        {/* <AntDesign name='adduser' size={24} color='white' /> */}
-                        <Text style={{
-                            fontSize: 16,
-                            fontWeight: 'bold',
-                            color: 'white',
-                        }}>Add borrower</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <DropDownPicker
-                    showTickIcon={false}
-                    searchable={true}
-                    open={recipientIsOpen}
-                    value={recipientValueSelected}
-                    items={recipientList}
-                    setOpen={setRecipientIsOpen}
-                    setValue={setRecipientValueSelected}
-                    onChangeValue={(value) => {
-                        const recipient = recipientList.find(p => p.value === value);
-                        if (!borrowers.includes(recipient)) {
-                            setBorrowers([...borrowers, recipient]);
-                        }
+            <View ref={parentViewRef} style={styles.content}>
+                <Toggle
+                    value={isBusinessLoan}
+                    onPress={(newState) => setIsBusinessLoan(newState)}
+                    thumbButton={{
+                        width: parentViewWidth / 2,
+                        height: 40,
+                        radius: 5,
+                        activeBackgroundColor: '#000',
+                        inActiveBackgroundColor: '#000',
                     }}
-                    searchPlaceholder='Search...'
-                    listMode='MODAL'
-                    modalProps={{
-                        animationType: 'slide'
+                    trackBar={{
+                        width: parentViewWidth,
+                        height: 40,
+                        radius: 5,
+                        borderWidth: 1,
+                        activeBackgroundColor: '#ddd3',
+                        inActiveBackgroundColor: '#ddd3',
                     }}
-                    style={{
-                        display: 'none',
+                    containerStyle={{
+                        marginBottom: 20
                     }}
-                    searchTextInputStyle={{
-                        backgroundColor: '#fff6',
-                        borderColor: '#cccc',
+                    trackBarStyle={{
+                        borderColor: '#ccc2',
                     }}
-                    searchContainerStyle={{ borderBottomColor: '#ccc6' }}
+                    leftComponent={
+                        <Text style={{ fontSize: 16, letterSpacing: 0.75, fontWeight: 'bold', color: isBusinessLoan ? '#888' : '#fff' }}>Personal {isBusinessLoan ? '' : 'loan'}</Text>
+                    }
+                    rightComponent={
+                        <Text style={{ fontSize: 16, letterSpacing: 0.75, fontWeight: 'bold', color: isBusinessLoan ? '#fff' : '#888' }}>Business {isBusinessLoan ? 'loan' : ''}</Text>
+                    }
                 />
 
-                {!borrowers.length && <Text style={{
-                    marginTop: 30,
-                    marginBottom: 10,
-                    color: 'grey',
-                    textAlign: 'center'
-                }}>Please add borrowers</Text>}
+                {!isBusinessLoan && <>
+                    <BorrowAddPersonalComponent />
+                </>}
 
-                {borrowers.map(b => <View key={b.value} style={{
-                    marginVertical: 10,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                }}>
-                    <Text style={{
-                        flexGrow: 1,
-                        minWidth: '30%',
+                {isBusinessLoan && <>
+                    <BorrowAddBusinessComponent />
+                </>}
 
-                    }}>{b.label}</Text>
-                    <TextInput
-                        style={{
-                            flexGrow: 1,
-                            textAlign: 'center',
-                            backgroundColor: '#fffa',
-                            borderColor: '#cccc',
-                            padding: 12,
-                            borderRadius: 5,
-                            borderWidth: 1,
-                            height: 40,
-                        }}
-                        returnKeyType='done'
-                        //onChangeText={(text) => setTokenAmount(Number.parseFloat(text))}
-                        //value={tokenAmount.toString()}
-                        maxLength={10}
-                    />
-                    <TouchableOpacity style={{
-                        //width: 40,
-                        padding: 8,
-                        marginLeft: 10,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: 'black',
-                        borderRadius: 5,
-                        elevation: 5,
-                    }} onPress={() => { }}>
-                        <AntDesign name='deleteuser' size={24} color='white' />
-                    </TouchableOpacity>
-
-                </View>)}
-
-                <TouchableOpacity disabled={!borrowers.length} style={borrowers.length ? styles.applyButton : styles.applyButtonDisabled} onPress={() => alert('Yes')}>
+                <TouchableOpacity style={styles.applyButton} onPress={() => alert('Yes')}>
                     <Text style={styles.applyButtonText}>Request</Text>
                 </TouchableOpacity>
 
@@ -208,24 +77,9 @@ const styles = StyleSheet.create({
     wrapper: {
     },
     content: {
-        paddingVertical: 20,
+        paddingTop: 6,
+        paddingBottom: 20,
     },
-    title: {
-        flexGrow: 1,
-        //textAlign: 'center',
-        fontSize: 16,
-        fontWeight: 'bold',
-        letterSpacing: 0.75,
-        //margin: 20,
-    },
-    cryptoDropDown: {
-        backgroundColor: '#fffa',
-        borderColor: '#cccc',
-        borderRadius: 5,
-        borderWidth: 1,
-        minHeight: 40,
-    },
-
     applyButton: {
         marginTop: 30,
         marginBottom: 10,
