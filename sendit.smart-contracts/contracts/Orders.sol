@@ -5,7 +5,6 @@ import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.s
 import {IRouterClient} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol";
 import {LinkTokenInterface} from "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol";
-import {MockUSDC} from "./MockUSDC.sol";
 
 /*
 
@@ -17,54 +16,48 @@ contract Orders is CCIPReceiver {
 
     address router; // Will be the address of the router of hte chain that deployed
 
-    MockUSDC public usdcToken;
+    //MockUSDC public usdcToken;
     LinkTokenInterface linkToken;
 
     constructor(address _router, address link) CCIPReceiver(_router) {
+        router = _router;
         linkToken = LinkTokenInterface(link);
-        usdcToken = new MockUSDC();
+        //usdcToken = new MockUSDC();
     }
 
     /// CCIP
-    /*
-        - Order can sends funds & Order 
-        - Order can recieve funds & Order
-        - Order emits events of sending
-        - Order keeps track of the received messages in a struct
-        
-    */
-    event MessageSent(
+    /*event MessageSent(
         bytes32 indexed messageId, // The unique ID of the message.
         uint64 indexed destinationChainSelector, // The chain selector of the destination chain.
         address receiver, // The address of the receiver on the destination chain.
         //address borrower, // The borrower's EOA - would map to a depositor on the source chain.
         Client.EVMTokenAmount tokenAmount, // The token amount that was sent.
         uint256 fees // The fees paid for sending the message.
-    );
+    );*/
 
     // Event emitted when a message is received from another chain.
-    event MessageReceived(
+    /*event MessageReceived(
         bytes32 indexed messageId, // The unique ID of the message.
         uint64 indexed sourceChainSelector, // The chain selector of the source chain.
         address sender, // The address of the sender from the source chain.
         address depositor, // The EOA of the depositor on the source chain
         Client.EVMTokenAmount tokenAmount // The token amount that was received.
-    );
+    );*/
 
     // Struct to hold details of a message.
-    struct MessageIn {
+    /*struct MessageIn {
         uint64 sourceChainSelector; // The chain selector of the source chain.
         address sender; // The address of the sender.
         address depositor; // The content of the message.
         address token; // received token.
         uint256 amount; // received amount.
-    }
+    }*/
 
-    bytes32[] public receivedMessages; // Array to keep track of the IDs of received messages.
+    /*bytes32[] public receivedMessages; // Array to keep track of the IDs of received messages.
     mapping(bytes32 => MessageIn) public messageDetail; // Mapping from message ID to MessageIn struct, storing details of each received message.
     mapping(address => mapping(address => uint256)) public deposits; // Depsitor Address => Deposited Token Address ==> amount
     //mapping(address => mapping(address => uint256)) public borrowings; // Depsitor Address => Borrowed Token Address ==> amount
-
+*/
     /// handle a received message
     function _ccipReceive(Client.Any2EVMMessage memory any2EvmMessage) internal override {
         bytes32 messageId = any2EvmMessage.messageId; // fetch the messageId
@@ -77,14 +70,14 @@ contract Orders is CCIPReceiver {
         address token = tokenAmounts[0].token;
         uint256 amount = tokenAmounts[0].amount;
 
-        receivedMessages.push(messageId);
-        MessageIn memory detail = MessageIn(sourceChainSelector, sender, depositor, token, amount);
-        messageDetail[messageId] = detail;
+        //receivedMessages.push(messageId);
+        //MessageIn memory detail = MessageIn(sourceChainSelector, sender, depositor, token, amount);
+        //messageDetail[messageId] = detail;
 
-        emit MessageReceived(messageId, sourceChainSelector, sender, depositor, tokenAmounts[0]);
+        //emit MessageReceived(messageId, sourceChainSelector, sender, depositor, tokenAmounts[0]);
 
         // Store depositor data.
-        deposits[depositor][token] += amount;
+        //deposits[depositor][token] += amount;
     }
 
 
@@ -104,7 +97,8 @@ contract Orders is CCIPReceiver {
         address agent; 
         uint256 amount; 
         uint256 offer; // Agents offer e.g. conversion rate 1 USD = 32.25 BAHT
-        string fromCurrency; // ticker USDT / USDC / BUSD ...
+        //string fromCurrency; // ticker USDT / USDC / BUSD ...
+        address fromCurrency; 
         string toCurrency; // Fiat currency that will be given as cash to the receiver
         string locationId; 
         Blockchain target;
@@ -119,7 +113,7 @@ contract Orders is CCIPReceiver {
         address sender,
         address receiver,
         uint256 amount,
-        string fromCurrency,
+        address fromCurrency,
         string toCurrency
     );
 
@@ -151,7 +145,7 @@ contract Orders is CCIPReceiver {
         address _agent,
         uint256 _amount,
         uint256 _offerRate,
-        string memory _fromCurrency,
+        address _fromCurrency,
         string memory _toCurrency,
         string memory _locationId,
         Blockchain memory _target
@@ -214,8 +208,10 @@ contract Orders is CCIPReceiver {
     }
 
     function withdraw(uint _orderId) public onlyAgent(_orderId) {
-        address transferredToken = messageDetail[msgId].token;
-        uint256 deposited = deposits[msg.sender][transferredToken];
+        // determine the token
+        //address transferredToken = messageDetail[msgId].token;
+        address transferredToken = orderBook[_orderId].fromCurrency;
+        //uint256 deposited = deposits[msg.sender][transferredToken];
 
         sendMessage(
             /*uint64 destinationChainSelector,*/ orderBook[_orderId].target.selector, 
@@ -251,7 +247,7 @@ contract Orders is CCIPReceiver {
     }
 
 
-    function assignagent(uint256 _orderId, address _agent) external {
+    /*function assignagent(uint256 _orderId, address _agent) external {
         Order storage order = orders[_orderId - 1];
 
         require(
@@ -271,7 +267,7 @@ contract Orders is CCIPReceiver {
         order.status = OrderStatus.InProgress;
 
         emit OrderInProgress(_orderId, _agent);
-    }
+    }*/
 
     function completeOrder(uint256 _orderId) external {
         require(_orderId - 1 < orders.length, "Order doesn't exist.");
@@ -360,6 +356,14 @@ contract Orders is CCIPReceiver {
         }
 
         return createdOrders;
+    }
+
+    /// Utilities
+    function convertStringToBytes32(string memory input) public pure returns (bytes32 result) {
+        require(bytes(input).length <= 32, "String is too long");
+        assembly {
+            result := mload(add(input, 32))
+        }
     }
 
     //event FundsSent(address, uint64, string);
