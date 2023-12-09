@@ -37,7 +37,7 @@ export function CourierItemComponent({ courier }: { courier: CourierModel }) {
                 <View style={styles.infoWrapper}>
                     <Text>{courier.label}</Text>
                     <Text style={styles.rate}>Rate: {courier.rate}</Text>
-                    <Text style={styles.sum}>{(courier.rate * 100).toFixed(2)} $ CAD</Text>
+                    <Text style={styles.sum}>{(courier.rate * 100).toFixed(2)} ฿ THB</Text>
                 </View>
                 <TouchableOpacity style={styles.acceptButton} onPress={() => onSuccessAccept()}>
                     <Text style={styles.acceptButtonText}>Accept</Text>

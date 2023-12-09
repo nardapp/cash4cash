@@ -7,14 +7,14 @@ import { cryptoList, fiatList } from '../../data';
 
 export function RequestCashComponent() {
 
-    const [fiatAmount, setFiatAmount] = useState(500);
-    const [fiatUnitPrice, setFiatUnitPrice] = useState(0.73);
+    const [fiatAmount, setFiatAmount] = useState(15000);
+    const [fiatUnitPrice, setFiatUnitPrice] = useState(0.028);
 
     const [cryptoIsOpen, setCryptoIsOpen] = useState(false);
-    const [cryptoValueSelected, setCryptoValueSelected] = useState<string>(cryptoList[0].value);
+    const [cryptoValueSelected, setCryptoValueSelected] = useState<string>(cryptoList[1].value);
 
     const [fiatIsOpen, setFiatIsOpen] = useState(false);
-    const [fiatValueSelected, setFiatValueSelected] = useState(fiatList[2].value);
+    const [fiatValueSelected, setFiatValueSelected] = useState(fiatList[4].value);
 
     const cryptoSelected = cryptoList.find(p => p.value === cryptoValueSelected);
     const fiatSelected = fiatList.find(p => p.value === fiatValueSelected);

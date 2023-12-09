@@ -7,34 +7,34 @@ import { BottomModalComponent } from '@/components';
 import { BorrowAddComponent } from './BorrowAdd.component';
 
 const borrows = [
-    {
-        status: 'rejected',
-        date: new Date(2021, 5, 20),
-        amount: 1000,
-        apy: 3,
-        lenders: [
-            {
-                name: 'John',
-                amount: 1000
-            }
-        ]
-    },
-    {
-        status: 'requested',
-        date: new Date(2021, 5, 20),
-        amount: 1000,
-        apy: 3,
-        lenders: [
-            {
-                name: 'John',
-                amount: 500
-            },
-            {
-                name: 'Peter',
-                amount: 500
-            }
-        ]
-    },
+    // {
+    //     status: 'rejected',
+    //     date: new Date(2021, 5, 20),
+    //     amount: 1000,
+    //     apy: 3,
+    //     lenders: [
+    //         {
+    //             name: 'John',
+    //             amount: 1000
+    //         }
+    //     ]
+    // },
+    // {
+    //     status: 'requested',
+    //     date: new Date(2021, 5, 20),
+    //     amount: 1000,
+    //     apy: 3,
+    //     lenders: [
+    //         {
+    //             name: 'John',
+    //             amount: 500
+    //         },
+    //         {
+    //             name: 'Peter',
+    //             amount: 500
+    //         }
+    //     ]
+    // },
     {
         date: new Date(2024, 3, 10),
         amount: 1000,

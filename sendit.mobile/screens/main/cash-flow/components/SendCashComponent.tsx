@@ -2,22 +2,26 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useBalance } from '@thirdweb-dev/react-native';
+import { ethers } from 'ethers';
 
 import { cryptoList, fiatList } from '../../data';
 
 export function SendCashComponent() {
 
     const [tokenAmount, setTokenAmount] = useState(500);
-    const [fiatUnitPrice, setFiatUnitPrice] = useState(1.36);
+    const [fiatUnitPrice, setFiatUnitPrice] = useState(35.4);
 
     const [cryptoIsOpen, setCryptoIsOpen] = useState(false);
-    const [cryptoValueSelected, setCryptoValueSelected] = useState<string>(cryptoList[0].value);
+    const [cryptoValueSelected, setCryptoValueSelected] = useState<string>(cryptoList[1].value);
 
     const [fiatIsOpen, setFiatIsOpen] = useState(false);
-    const [fiatValueSelected, setFiatValueSelected] = useState(fiatList[2].value);
+    const [fiatValueSelected, setFiatValueSelected] = useState(fiatList[4].value);
 
     const cryptoSelected = cryptoList.find(p => p.value === cryptoValueSelected);
     const fiatSelected = fiatList.find(p => p.value === fiatValueSelected);
+
+    const { data, isLoading } = useBalance(cryptoSelected.address);
 
     return (
         <View style={styles.content}>
@@ -56,7 +60,7 @@ export function SendCashComponent() {
                                     searchContainerStyle={{ borderBottomColor: "#ccc6" }}
                                 />
                             </View>
-                            <Text style={{ color: '#666', marginHorizontal: 5 }}>Balance: 1000.0</Text>
+                            {data && <Text style={{ color: '#666', marginHorizontal: 5 }}>Balance: {data?.displayValue}</Text>}
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             <TextInput
@@ -76,19 +80,19 @@ export function SendCashComponent() {
                                 value={tokenAmount.toString()}
                                 maxLength={10}
                             />
-                            <TouchableOpacity style={{
+                            {data && <TouchableOpacity style={{
                                 width: 40,
                                 backgroundColor: 'black',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 borderRadius: 5,
                                 elevation: 5,
-                            }} onPress={() => setTokenAmount(1000)}>
+                            }} onPress={() => setTokenAmount(+ethers.utils.formatUnits(data.value, cryptoSelected.unit))}>
                                 <Text style={{
                                     fontWeight: '500',
                                     color: 'white',
                                 }}>Max</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity>}
                         </View>
                         {false && <View>
                             <Text style={{ marginTop: 5, color: '#f57c71', fontWeight: '600' }}>Invalid</Text>

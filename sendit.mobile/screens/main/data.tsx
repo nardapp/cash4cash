@@ -51,21 +51,21 @@ export const courierList: CourierModel[] = [
     {
         label: 'William Anderson',
         value: '1',
-        rate: 1.361,
+        rate: 34.9,
         icon: require(`../../assets/couriers/1.png`),
         address: '0x61988E87c4d8e9E9E4567d248CaD51823b071Fd8',
     },
     {
         label: 'David Clark',
         value: '2',
-        rate: 1.38,
+        rate: 35.4,
         icon: require(`../../assets/couriers/2.png`),
         address: '0xA38D39e4266DFAde14336A9aE31e1D16F4e56a95',
     },
     {
         label: 'Jennifer Martinez',
         value: '3',
-        rate: 1.37,
+        rate: 35.2,
         icon: require(`../../assets/couriers/3.png`),
         address: '0x3188a469339961F6E3F1Ff603b85F8379dc2f227',
     },
@@ -114,17 +114,23 @@ export const cryptoList = [
     {
         label: 'USDT',
         value: 'usdt',
-        icon: () => <Image source={require(`../../assets/tokens/${'usdt'}.png`)} style={{ width: 20, height: 20 }} />
+        icon: () => <Image source={require(`../../assets/tokens/${'usdt'}.png`)} style={{ width: 20, height: 20 }} />,
+        address: '0xA02f6adc7926efeBBd59Fd43A84f4E0c0c91e832',
+        unit: 6
     },
     {
         label: 'USDC',
         value: 'usdc',
-        icon: () => <Image source={require(`../../assets/tokens/${'usdc'}.png`)} style={{ width: 20, height: 20 }} />
+        icon: () => <Image source={require(`../../assets/tokens/${'usdc'}.png`)} style={{ width: 20, height: 20 }} />,
+        address: '0x9999f7Fea5938fD3b1E26A12c3f2fb024e194f97',
+        unit: 6
     },
     {
         label: 'ETH',
         value: 'eth',
-        icon: () => <Image source={require(`../../assets/tokens/${'eth'}.png`)} style={{ width: 20, height: 20 }} />
+        icon: () => <Image source={require(`../../assets/tokens/${'eth'}.png`)} style={{ width: 20, height: 20 }} />,
+        address: '0x9c3C9283D3e44854697Cd22D3Faa240Cfb032889',
+        unit: 18
     }
 ];
 

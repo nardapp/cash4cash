@@ -93,8 +93,8 @@ export function CashFlowScreen() {
                     >
                         <TouchableOpacity onPress={() => setIsModalVisible(true)}>
                             <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={{ marginHorizontal: 10, color: '#555', fontWeight: 'bold' }}>100 USDT</Text>
-                                <Image source={require(`../../../assets/tokens/${'usdt'}.png`)} style={{
+                                <Text style={{ marginHorizontal: 10, color: '#555', fontWeight: 'bold' }}>100 USDC</Text>
+                                <Image source={require(`../../../assets/tokens/${'usdc'}.png`)} style={{
                                     left: 3,
                                     width: 30,
                                     height: 30,
@@ -109,7 +109,7 @@ export function CashFlowScreen() {
                                     shadowOpacity: 0.25,
                                     shadowRadius: 3.84,
                                 }} />
-                                <Image source={require(`../../../assets/flags/${'ca'}.png`)} style={{
+                                <Image source={require(`../../../assets/flags/${'th'}.png`)} style={{
                                     left: -3,
                                     width: 30,
                                     height: 30,
@@ -124,7 +124,7 @@ export function CashFlowScreen() {
                                     shadowOpacity: 0.25,
                                     shadowRadius: 3.84,
                                 }} />
-                                <Text style={{ marginHorizontal: 10, color: '#555', fontWeight: 'bold' }}>136.51* $ CAD</Text>
+                                <Text style={{ marginHorizontal: 10, color: '#555', fontWeight: 'bold' }}>3 500* ฿ THB</Text>
                             </View>
                         </TouchableOpacity>
                         <TextInput

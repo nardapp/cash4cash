@@ -1,14 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Toggle from 'react-native-toggle-element';
+import { Web3Button, useContract, useContractWrite } from '@thirdweb-dev/react-native';
 
 import { BorrowAddPersonalComponent } from './BorrowAddPersonal.component';
 import { BorrowAddBusinessComponent } from './BorrowAddBusiness.component';
+
+const contractAddress = '0xce6ac3291794b28208842a3b930d48665d962528';
 
 export function BorrowAddComponent() {
     const [isBusinessLoan, setIsBusinessLoan] = useState(false);
     const [parentViewWidth, setParentViewWidth] = useState(350);
     const parentViewRef = useRef<View>();
+
+    const { contract } = useContract(contractAddress);
+    const { mutateAsync, isLoading, error } = useContractWrite(contract, 'requestLoan');
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -20,6 +26,8 @@ export function BorrowAddComponent() {
         }, 100);
         return () => clearTimeout(timer);
     }, [parentViewRef]);
+
+    const orderId = 1, amount = 1000000, loanTerm = 600;
 
     return (
         <View style={styles.wrapper}>
@@ -64,9 +72,22 @@ export function BorrowAddComponent() {
                     <BorrowAddBusinessComponent />
                 </>}
 
-                <TouchableOpacity style={styles.applyButton} onPress={() => alert('Yes')}>
+                {/* <TouchableOpacity style={styles.applyButton} onPress={() => alert('Yes')}>
                     <Text style={styles.applyButtonText}>Request</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+
+                <View style={styles.requestButton}>
+                    <Web3Button
+                        contractAddress={contractAddress}
+                        action={() => mutateAsync({ args: [orderId, amount, loanTerm] })}
+                        onSuccess={(result) => alert('Success!')}
+                        onError={(error) => alert(`Something went wrong!\n\n${error?.message}`)}
+                        onSubmit={() => alert('Transaction submitted')}
+                    >
+                        Request
+                    </Web3Button>
+                </View>
+
 
             </View>
         </View>
@@ -79,6 +100,10 @@ const styles = StyleSheet.create({
     content: {
         paddingTop: 6,
         paddingBottom: 20,
+    },
+    requestButton: {
+        marginTop: 30,
+        marginBottom: 10,
     },
     applyButton: {
         marginTop: 30,

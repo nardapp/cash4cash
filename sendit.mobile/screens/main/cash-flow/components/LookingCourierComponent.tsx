@@ -86,8 +86,8 @@ export function LookingCourierComponent({ isVisible, onClose, location }: {
                             marginHorizontal: 10,
                             color: '#666',
                             fontWeight: 'bold'
-                        }}>100 USDT</Text>
-                        <Image source={require(`../../../../assets/tokens/${'usdt'}.png`)} style={{
+                        }}>100 USDC</Text>
+                        <Image source={require(`../../../../assets/tokens/${'usdc'}.png`)} style={{
                             left: 3,
                             width: 30,
                             height: 30,
@@ -102,7 +102,7 @@ export function LookingCourierComponent({ isVisible, onClose, location }: {
                             shadowOpacity: 0.25,
                             shadowRadius: 3.84,
                         }} />
-                        <Image source={require(`../../../../assets/flags/${'ca'}.png`)} style={{
+                        <Image source={require(`../../../../assets/flags/${'th'}.png`)} style={{
                             left: -3,
                             width: 30,
                             height: 30,
@@ -122,7 +122,7 @@ export function LookingCourierComponent({ isVisible, onClose, location }: {
                             marginHorizontal: 10,
                             color: '#666',
                             fontWeight: 'bold'
-                        }}>$ CAD</Text>
+                        }}>฿ THB</Text>
                     </View>
 
                     <TouchableOpacity style={styles.сancelButton} onPress={onCancelButtonClick}>

@@ -7,7 +7,7 @@ import { cryptoList, recipientList, networks } from '../../data';
 
 export function BorrowAddPersonalComponent() {
     const [cryptoIsOpen, setCryptoIsOpen] = useState(false);
-    const [cryptoValueSelected, setCryptoValueSelected] = useState<string>(cryptoList[0].value);
+    const [cryptoValueSelected, setCryptoValueSelected] = useState<string>(cryptoList[1].value);
 
     const [networkIsOpen, setNetworkIsOpen] = useState(false);
     const [networkValueSelected, setNetworkValueSelected] = useState<string>(networks[0].value);

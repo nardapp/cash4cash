@@ -12,7 +12,7 @@ export function CashFlowPicker({ onCloseModal }) {
     const parentViewRef = useRef<View>();
 
     const [recipientIsOpen, setRecipientIsOpen] = useState(false);
-    const [recipientValueSelected, setRecipientValueSelected] = useState<string>(recipientList[2].value);
+    const [recipientValueSelected, setRecipientValueSelected] = useState<string>(recipientList[4].value);
 
     useEffect(() => {
         const timer = setTimeout(() => {
