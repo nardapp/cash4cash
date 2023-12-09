@@ -8,52 +8,9 @@ import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications
 
 /*
 
-	WIP 2023-12-09-08-21
+	WIP 2023-12-09-10-07
 
 */
-
-contract CCIPReceiver_Unsafe is CCIPReceiver {
-    address public latestSender;
-    string public latestMessage;
-
-    constructor(address router) CCIPReceiver(router) {}
-    
-    function _ccipReceive(Client.Any2EVMMessage memory message) internal override {
-        latestSender = abi.decode(message.sender, (address));
-        latestMessage = abi.decode(message.data , (string));
-    }
-}
-
-contract CCIPSender_Unsafe {
-    address link;
-    address router;
-
-    constructor(address _link, address _router) {
-        link = _link;
-        router = _router;
-        LinkTokenInterface(link).approve(router, type(uint256).max);
-    }
-
-    function sendCC(
-        address receiver, 
-        string memory messageText, 
-        uint64 destinationChainSelector
-    ) external {
-        Client.EVM2AnyMessage memory message = Client.EVM2AnyMessage({
-            receiver: abi.encode(receiver),
-            data: abi.encode(messageText),
-            tokenAmounts: new Client.EVMTokenAmount[](0),
-            extraArgs: ""/*Client._argsToBytes(
-                // Additional arguments, setting gas limit and non-strict sequency mode
-                Client.EVMExtraArgsV1({gasLimit: 300_000, strict: false}) 
-            )*/,
-            feeToken: link
-        });
-
-        IRouterClient(router).ccipSend(destinationChainSelector, message);
-    }
-}
-
 
 contract Orders is CCIPReceiver {
 
