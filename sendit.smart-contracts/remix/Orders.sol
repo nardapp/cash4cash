@@ -5,23 +5,34 @@ import {Client} from "@chainlink/contracts-ccip/src/v0.8/ccip/libraries/Client.s
 import {IRouterClient} from "@chainlink/contracts-ccip/src/v0.8/ccip/interfaces/IRouterClient.sol";
 import {LinkTokenInterface} from "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import {CCIPReceiver} from "@chainlink/contracts-ccip/src/v0.8/ccip/applications/CCIPReceiver.sol";
+import {MockUSDC} from "./MockUSDC.sol";
 
 /*
 
-	WIP 2023-12-09-10-07
+	WIP 2023-12-09-08-21
 
 */
 
 contract Orders is CCIPReceiver {
 
-    address router; // The address of the router contract which the network this contract been deployed at
+    address router; // Will be the address of the router of hte chain that deployed
 
-    constructor(address _router) CCIPReceiver(_router) {
-        router = _router;
+    MockUSDC public usdcToken;
+    LinkTokenInterface linkToken;
+
+    constructor(address _router, address link) CCIPReceiver(_router) {
+        linkToken = LinkTokenInterface(link);
+        usdcToken = new MockUSDC();
     }
 
     /// CCIP
-    // Event emitted when a message is sent to another chain.
+    /*
+        - Order can sends funds & Order 
+        - Order can recieve funds & Order
+        - Order emits events of sending
+        - Order keeps track of the received messages in a struct
+        
+    */
     event MessageSent(
         bytes32 indexed messageId, // The unique ID of the message.
         uint64 indexed destinationChainSelector, // The chain selector of the destination chain.
@@ -32,7 +43,7 @@ contract Orders is CCIPReceiver {
     );
 
     // Event emitted when a message is received from another chain.
-    event OrderReceived(
+    event MessageReceived(
         bytes32 indexed messageId, // The unique ID of the message.
         uint64 indexed sourceChainSelector, // The chain selector of the source chain.
         address sender, // The address of the sender from the source chain.
@@ -67,16 +78,10 @@ contract Orders is CCIPReceiver {
         uint256 amount = tokenAmounts[0].amount;
 
         receivedMessages.push(messageId);
-        MessageIn memory detail = MessageIn(
-            sourceChainSelector, sender, 
-            depositor, 
-            token, amount );
+        MessageIn memory detail = MessageIn(sourceChainSelector, sender, depositor, token, amount);
         messageDetail[messageId] = detail;
 
-        emit OrderReceived(
-            messageId, sourceChainSelector, sender, 
-            depositor, 
-            tokenAmounts[0] );
+        emit MessageReceived(messageId, sourceChainSelector, sender, depositor, tokenAmounts[0]);
 
         // Store depositor data.
         deposits[depositor][token] += amount;
@@ -94,17 +99,19 @@ contract Orders is CCIPReceiver {
 
     struct Order {
         uint256 orderId;
-        address sender;
-        address receiver;
-        address agent;
-        uint256 amount;
-        string fromCurrency;
-        string toCurrency;
-        string locationId;
-        OrderStatus status;
+        address sender; 
+        address receiver; 
+        address agent; 
+        uint256 amount; 
+        uint256 offer; // Agents offer e.g. conversion rate 1 USD = 32.25 BAHT
+        string fromCurrency; // ticker USDT / USDC / BUSD ...
+        string toCurrency; // Fiat currency that will be given as cash to the receiver
+        string locationId; 
+        Blockchain target;
+        OrderStatus status; 
     }
 
-    mapping(uint256 => Order) public orderMap;
+    mapping(uint256 => Order) public orderBook;
     Order[] public orders;
 
     event OrderCreated(
@@ -141,19 +148,16 @@ contract Orders is CCIPReceiver {
 
     function createOrder(
         address _receiver,
+        address _agent,
         uint256 _amount,
+        uint256 _offerRate,
         string memory _fromCurrency,
         string memory _toCurrency,
-        string memory _locationId
-    ) external {
-        require(
-            _amount > 0, 
-            "Amount must be greater than zero."
-        );
-        require(
-            _receiver != msg.sender, 
-            "Receiver cannot be the same as the sender."
-        );
+        string memory _locationId,
+        Blockchain memory _target
+    ) public {
+        require(_amount > 0, "Amount must be greater than zero.");
+        require(_receiver != msg.sender, "Receiver cannot be the same as the sender.");
 
         uint256 _orderId = orders.length + 1;
 
@@ -161,15 +165,17 @@ contract Orders is CCIPReceiver {
             orderId: _orderId,
             sender: msg.sender,
             receiver: _receiver,
-            agent: address(0),
+            agent: _agent,
             amount: _amount,
+            offer: _offerRate,
             fromCurrency: _fromCurrency,
             toCurrency: _toCurrency,
             locationId: _locationId,
+            target: _target,
             status: OrderStatus.Created
         });
 
-        orderMap[newOrder.orderId] = newOrder;
+        orderBook[newOrder.orderId] = newOrder;
         orders.push(newOrder);
 
         emit OrderCreated(
@@ -181,6 +187,69 @@ contract Orders is CCIPReceiver {
             _toCurrency
         );
     }
+
+    error notTheRightSender();
+
+    modifier onlySender(uint _orderId){
+        require(msg.sender == orderBook[_orderId].sender, "User is not the requestant of this order.");
+        _;
+    }
+
+    modifier onlyAgent(uint _orderId){
+        require(msg.sender == orderBook[_orderId].agent, "User is not the agent of this order.");
+        _;
+    }
+
+    function deposit(uint _orderId) public onlySender(_orderId) payable {
+        require(msg.value >= orderBook[_orderId].amount, "Not the right amount of funds to deposit.");
+        // Lock the funds
+        emit OrderInProgress(_orderId, orderBook[_orderId].agent);
+    }
+
+    struct Blockchain {
+        string name;
+        address router; // Other Order Contract or EOA of an agent
+        uint64 selector; // destinationChainSelector
+        address orderContract;
+    }
+
+    function withdraw(uint _orderId) public onlyAgent(_orderId) {
+        address transferredToken = messageDetail[msgId].token;
+        uint256 deposited = deposits[msg.sender][transferredToken];
+
+        sendMessage(
+            /*uint64 destinationChainSelector,*/ orderBook[_orderId].target.selector, 
+            /*address receiver,*/ orderBook[_orderId].agent, // directly to agent's EOA
+            /*address tokenToTransfer,*/ transferredToken, 
+            /*uint256 transferAmount*/ orderBook[_orderId].amount 
+        );
+    }
+
+    function sendMessage(
+        uint64 destinationChainSelector,
+        address receiver,
+        address tokenToTransfer,
+        uint256 transferAmount
+    ) internal returns (bytes32 messageId) {
+        address borrower = msg.sender;
+
+        // Compose the EVMTokenAmountStruct. This struct describes the tokens being transferred using CCIP.
+        Client.EVMTokenAmount[] memory tokenAmounts = new Client.EVMTokenAmount[](1);
+
+        Client.EVMTokenAmount memory tokenAmount = Client.EVMTokenAmount({token: tokenToTransfer, amount: transferAmount});
+        tokenAmounts[0] = tokenAmount;
+
+        Client.EVM2AnyMessage memory evm2AnyMessage = Client.EVM2AnyMessage({
+            receiver: abi.encode(receiver), // ABI-encoded receiver address
+            data: abi.encode(borrower), // ABI-encoded string message
+            tokenAmounts: tokenAmounts,
+            extraArgs: Client._argsToBytes(
+                Client.EVMExtraArgsV1({gasLimit: 200_000, strict: false}) // Additional arguments, setting gas limit and non-strict sequency mode
+            ),
+            feeToken: address(linkToken) // Setting feeToken to LinkToken address, indicating LINK will be used for fees
+        });
+    }
+
 
     function assignagent(uint256 _orderId, address _agent) external {
         Order storage order = orders[_orderId - 1];
@@ -264,11 +333,11 @@ contract Orders is CCIPReceiver {
     }
 
     function getOrderByMap(uint256 _orderId) public view returns(Order memory){
-        return orderMap[_orderId];
+        return orderBook[_orderId];
     }
 
     function getOrderStatus(uint256 _orderId) public view returns(OrderStatus){
-        return orderMap[_orderId].status;
+        return orderBook[_orderId].status;
     }
 
     function getCreatedOrders() public view returns (Order[] memory) {
