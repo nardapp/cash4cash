@@ -10,7 +10,7 @@ import {IERC165} from "@chainlink/contracts-ccip/src/v0.8/vendor/openzeppelin-so
 
 /*
 
-	WIP 2023-12-09-20-55
+	WIP 2023-12-09-22-53
 
 */
 
@@ -33,7 +33,8 @@ contract Orders is CCIPReceiver {
         uint64 indexed destinationChainSelector, // The chain selector of the destination chain.
         address receiver, // The address of the receiver on the destination chain.
         // will change to order data
-        address borrower, // The borrower's EOA - would map to a depositor on the source chain.
+        //address borrower, // The borrower's EOA - would map to a depositor on the source chain.
+        Order indexed order,
         Client.EVMTokenAmount tokenAmount, // The token amount that was sent.
         uint256 fees // The fees paid for sending the message.
     );
@@ -44,7 +45,8 @@ contract Orders is CCIPReceiver {
         uint64 indexed sourceChainSelector, // The chain selector of the source chain.
         address sender, // The address of the sender from the source chain.
         // depositor will be changed to Order as data to send
-        address depositor, // The EOA of the depositor on the source chain
+        //address depositor, // The EOA of the depositor on the source chain
+        Order indexed order,
         Client.EVMTokenAmount tokenAmount // The token amount that was received.
     );
 
@@ -52,7 +54,8 @@ contract Orders is CCIPReceiver {
     struct MessageIn {
         uint64 sourceChainSelector; // The chain selector of the source chain.
         address sender; // The address of the sender.
-        address depositor; // The content of the message.
+        //address depositor; // The content of the message.
+        Order order; // The content of the message.
         address token; // received token.
         uint256 amount; // received amount.
     }
@@ -60,14 +63,16 @@ contract Orders is CCIPReceiver {
     // Storage variables.
     bytes32[] public receivedMessages; // Array to keep track of the IDs of received messages.
     mapping(bytes32 => MessageIn) public messageDetail; // Mapping from message ID to MessageIn struct, storing details of each received message.
-    mapping(address => mapping(address => uint256)) public deposits; // Depsitor Address => Deposited Token Address ==> amount
+    //mapping(address => mapping(address => uint256)) public deposits; // Depsitor Address => Deposited Token Address ==> amount
+    mapping(uint256 => mapping(address => uint256)) public deposits; // Order => sender ==> amount
     
     function _ccipReceive(Client.Any2EVMMessage memory any2EvmMessage) internal override {
         bytes32 messageId = any2EvmMessage.messageId; // fetch the messageId
         uint64 sourceChainSelector = any2EvmMessage.sourceChainSelector; // fetch the source chain identifier (aka selector)
         address sender = abi.decode(any2EvmMessage.sender, (address)); // abi-decoding of the sender address
         /// This data will be representing the Order [ + unlocking code] from another contract
-        address depositor = abi.decode(any2EvmMessage.data, (address)); // abi-decoding of the order data 
+        //address depositor = abi.decode(any2EvmMessage.data, (address)); // abi-decoding of the order data 
+        Order memory order = abi.decode(any2EvmMessage.data, (Order)); // abi-decoding of the order data 
 
         // Collect tokens transferred. This increases this contract's ba0lance for that Token.
         Client.EVMTokenAmount[] memory tokenAmounts = any2EvmMessage.destTokenAmounts;
@@ -75,13 +80,16 @@ contract Orders is CCIPReceiver {
         uint256 amount = tokenAmounts[0].amount;
 
         receivedMessages.push(messageId);
-        MessageIn memory detail = MessageIn(sourceChainSelector, sender, depositor, token, amount);
+        //MessageIn memory detail = MessageIn(sourceChainSelector, sender, depositor, token, amount);
+        MessageIn memory detail = MessageIn(sourceChainSelector, sender, order, token, amount);
         messageDetail[messageId] = detail;
 
-        emit MessageReceived(messageId, sourceChainSelector, sender, depositor, tokenAmounts[0]);
+        //emit MessageReceived(messageId, sourceChainSelector, sender, depositor, tokenAmounts[0]);
+        emit MessageReceived(messageId, sourceChainSelector, sender, order, tokenAmounts[0]);
 
         // Store depositor data.
-        deposits[depositor][token] += amount;
+        //deposits[depositor][token] += amount;
+        deposits[order.orderId][token] += amount;
     }
 
     function sendMessage(
@@ -90,7 +98,8 @@ contract Orders is CCIPReceiver {
         address tokenToTransfer,
         uint256 transferAmount
     ) internal returns (bytes32 messageId) {
-        /* change var: borrower -> orderContract */ address borrower = msg.sender;
+        //address borrower = msg.sender;
+        Order memory order;
 
         // Compose the EVMTokenAmountStruct. This struct describes the tokens being transferred using CCIP.
         Client.EVMTokenAmount[] memory tokenAmounts = new Client.EVMTokenAmount[](1);
@@ -103,7 +112,7 @@ contract Orders is CCIPReceiver {
 
         Client.EVM2AnyMessage memory evm2AnyMessage = Client.EVM2AnyMessage({
             receiver: abi.encode(receiver), // ABI-encoded receiver address
-            data: abi.encode(borrower), // ABI-encoded string message 
+            data: abi.encode(order), // ABI-encoded string message 
             tokenAmounts: tokenAmounts,
             extraArgs: "", /* Client._argsToBytes(
                 Client.EVMExtraArgsV1({gasLimit: 200_000, strict: false}) 
@@ -126,9 +135,9 @@ contract Orders is CCIPReceiver {
         messageId = router.ccipSend(destinationChainSelector, evm2AnyMessage);
 
         // Emit an event with message details
-        emit MessageSent(messageId, destinationChainSelector, receiver, borrower, tokenAmount, fees);
+        emit MessageSent(messageId, destinationChainSelector, receiver, order, tokenAmount, fees);
 
-        deposits[borrower][tokenToTransfer] -= transferAmount;
+        deposits[order.orderId][tokenToTransfer] -= transferAmount;
         
         // Return the message ID
         return messageId;
