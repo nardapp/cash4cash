@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "sendit",
-    "slug": "send-it",
+    "name": "Cash 4 Cash",
+    "slug": "cash4cash",
     "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "sendit",
+    "scheme": "cash4cash",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -15,19 +15,17 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.happynariman.sendit"
+      "bundleIdentifier": "com.nardapp.cash4cash"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.happynariman.sendit"
+      "package": "com.nardapp.cash4cash"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

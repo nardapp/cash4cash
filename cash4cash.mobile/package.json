@@ -58,7 +58,7 @@
     "build": "expo prebuild",
     "format": "prettier --write \"./**/*.ts\" \"./**/*.ts\""
   },
-  "name": "sendit",
+  "name": "cash4cash",
   "version": "1.0.0",
   "private": true
 }

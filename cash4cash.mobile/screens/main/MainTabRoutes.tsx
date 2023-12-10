@@ -96,7 +96,7 @@ function MainTabCashFlowComponent() {
         <CashFlowStack.Navigator
             initialRouteName={NavigationPaths.SCREEN_CASH_FLOW}
             screenOptions={{
-                title: 'Send It!',
+                title: 'Cash 4 Cash',
                 headerTransparent: true,
                 headerBackground: () => (
                     <BlurView tint='light' intensity={10} style={StyleSheet.absoluteFill} />

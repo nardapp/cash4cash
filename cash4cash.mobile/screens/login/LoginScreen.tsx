@@ -31,14 +31,13 @@ export function LoginScreen({ onCloseModal }) {
     const onDisconnect = useDisconnect();
     const address = useAddress();
     const wallet = useWallet();
-    console.log('\n\n');
 
 
     const [twitterAuthRequest, twitterAuthSessionResult, startTwitterLoginAsync] = useAuthRequest(
         {
             clientId: TWITTER_CLIENT_ID,
             redirectUri: makeRedirectUri({
-                scheme: 'sendit',
+                scheme: 'cash4cash',
             }),
             usePKCE: true,
             scopes: [
