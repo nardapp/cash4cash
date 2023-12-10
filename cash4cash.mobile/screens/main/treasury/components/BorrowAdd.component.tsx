@@ -5,8 +5,7 @@ import { Web3Button, useContract, useContractWrite } from '@thirdweb-dev/react-n
 
 import { BorrowAddPersonalComponent } from './BorrowAddPersonal.component';
 import { BorrowAddBusinessComponent } from './BorrowAddBusiness.component';
-
-const contractAddress = '0xce6ac3291794b28208842a3b930d48665d962528';
+import { contractAddress } from '../../data';
 
 export function BorrowAddComponent() {
     const [isBusinessLoan, setIsBusinessLoan] = useState(false);

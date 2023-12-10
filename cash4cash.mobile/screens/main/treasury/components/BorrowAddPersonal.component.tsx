@@ -6,6 +6,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { cryptoList, recipientList, networks } from '../../data';
 
 export function BorrowAddPersonalComponent() {
+    const [amount, setAmount] = useState(0);
+
     const [cryptoIsOpen, setCryptoIsOpen] = useState(false);
     const [cryptoValueSelected, setCryptoValueSelected] = useState<string>(cryptoList[1].value);
 
@@ -83,8 +85,8 @@ export function BorrowAddPersonalComponent() {
                         }}
                         keyboardType='numeric'
                         returnKeyType='done'
-                        //onChangeText={(text) => setTokenAmount(Number.parseFloat(text))}
-                        //value={tokenAmount.toString()}
+                        onChangeText={(text) => setAmount(Number.parseFloat(text))}
+                        value={amount.toString()}
                         maxLength={10}
                     />
                 </View>

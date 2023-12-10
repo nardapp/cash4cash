@@ -1,6 +1,8 @@
 import { Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
+export const contractAddress = '0xce6ac3291794b28208842a3b930d48665d962528';
+
 export const recipientList = [
     {
         label: 'Add contact',

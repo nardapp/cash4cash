@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { ConnectWallet, useDisconnect, useConnectionStatus, useAddress, useCreateWalletInstance, useSetConnectionStatus, useSetConnectedWallet, localWallet } from '@thirdweb-dev/react-native';
+import { ConnectWallet, useConnectionStatus, useAddress, useCreateWalletInstance, useSetConnectionStatus, useSetConnectedWallet, localWallet, useENS } from '@thirdweb-dev/react-native';
 import { Ethereum, Mumbai } from '@thirdweb-dev/chains';
-import { AntDesign, Entypo } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 import { LoginScreen } from '@/screens';
 import { truncateEthAddress } from '@/utils';
 import { BottomModalComponent } from '../BottomModalComponent';
-import { useEnsName } from '@/hooks';
 
 const WALLET_PRIVATE_KEY = process.env.EXPO_PUBLIC_WALLET_PRIVATE_KEY;
 
@@ -20,11 +19,7 @@ export function UserHeaderComponent() {
 
     const address = useAddress();
     const connectionStatus = useConnectionStatus();
-    const { isLoading, error, name, avatar } = useEnsName(address);
-
-    useEffect(() => {
-
-    }, []);
+    const { data } = useENS();
 
     const onLocalWalletConnect = async () => {
         const walletConfig = localWallet();
@@ -46,7 +41,7 @@ export function UserHeaderComponent() {
     };
 
     return (<>
-        <BottomModalComponent title={name ?? truncateEthAddress(address?.toString())} isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} blurIntensity={100}>
+        <BottomModalComponent title={data?.ens ?? truncateEthAddress(address?.toString())} isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} blurIntensity={100}>
             <LoginScreen onCloseModal={() => setIsModalVisible(false)} />
         </BottomModalComponent>
 
@@ -63,7 +58,7 @@ export function UserHeaderComponent() {
             </>}
             {connectionStatus === 'connected' && <>
                 <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.button}>
-                    <Text style={{ ...styles.buttonText, fontSize: 12, fontWeight: 'normal' }}>{name ?? truncateEthAddress(address?.toString())}</Text>
+                    <Text style={{ ...styles.buttonText, fontSize: 12, fontWeight: 'normal' }}>{data?.ens ?? truncateEthAddress(address?.toString())}</Text>
                     <Entypo name="chevron-down" size={18} color="white" />
                 </TouchableOpacity>
             </>}

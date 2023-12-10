@@ -5,68 +5,11 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { BottomModalComponent } from '@/components';
 
 import { BorrowAddComponent } from './BorrowAdd.component';
-
-const borrows = [
-    // {
-    //     status: 'rejected',
-    //     date: new Date(2021, 5, 20),
-    //     amount: 1000,
-    //     apy: 3,
-    //     lenders: [
-    //         {
-    //             name: 'John',
-    //             amount: 1000
-    //         }
-    //     ]
-    // },
-    // {
-    //     status: 'requested',
-    //     date: new Date(2021, 5, 20),
-    //     amount: 1000,
-    //     apy: 3,
-    //     lenders: [
-    //         {
-    //             name: 'John',
-    //             amount: 500
-    //         },
-    //         {
-    //             name: 'Peter',
-    //             amount: 500
-    //         }
-    //     ]
-    // },
-    {
-        date: new Date(2024, 3, 10),
-        amount: 1000,
-        apy: 3,
-        status: 'active',
-        lenders: [
-            {
-                name: 'John',
-                amount: 500
-            },
-            {
-                name: 'Peter',
-                amount: 500
-            }
-        ]
-    },
-    {
-        date: new Date(2024, 6, 22),
-        amount: 1000,
-        apy: 3,
-        status: 'active',
-        lenders: [
-            {
-                name: 'John',
-                amount: 1000
-            },
-        ]
-    }
-];
+import { BorrowListComponent } from './BorrowList.component';
 
 export function BorrowComponent({ onChangeBlurBackground }: { onChangeBlurBackground: (value: boolean) => void }) {
     const [isBorrowModalVisible, setIsBorrowModalVisible] = useState(false);
+    const [borrowLength, setBorrowLength] = useState(0);
 
     useEffect(() => {
         onChangeBlurBackground(isBorrowModalVisible);
@@ -86,10 +29,10 @@ export function BorrowComponent({ onChangeBlurBackground }: { onChangeBlurBackgr
 
                 <View style={styles.info}>
                     <View style={{ flex: 1 }}>
-                        {!borrows.length && <>
+                        {!borrowLength && <>
                             <Text style={{ color: 'grey' }}>No borrow yet</Text>
                         </>}
-                        {!!borrows.length && <>
+                        {!!borrowLength && <>
                             <Text style={{ fontSize: 16, }}>Current borrowed</Text>
                             <Text style={{ color: 'grey' }}>
                                 $2000
@@ -105,29 +48,12 @@ export function BorrowComponent({ onChangeBlurBackground }: { onChangeBlurBackgr
 
                 <View style={styles.separator} />
 
-                {!borrows.length && <View style={styles.empty}>
+                {!borrowLength && <View style={styles.empty}>
                     <Text style={{ color: 'grey', marginBottom: 5 }}>Need money?</Text>
                     <Text style={{ color: 'grey' }}>Click "Add +" button and your friends will help.</Text>
                 </View>}
 
-                {!!borrows.length && <View style={styles.list}>
-
-                    {borrows.map((b, i) => <View key={i} style={styles.listItem}>
-                        <View style={{ flex: 1 }}>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{b.amount} USDT</Text>
-                            <Text style={{ color: 'grey' }}>
-                                {b.date?.toLocaleDateString()}
-                                <Text style={{ fontSize: 18, fontWeight: 'bold' }}> · </Text>
-                                {b.apy}% APY
-                            </Text>
-                            {!!b.lenders?.length && <Text style={{ color: 'grey' }}>
-                                {b.lenders?.length} lenders
-                            </Text>}
-                        </View>
-                        <Text style={{ color: 'grey' }}>{b.status}</Text>
-                    </View>)}
-
-                </View>}
+                <BorrowListComponent setBorrowLength={setBorrowLength} />
 
                 <View style={styles.help}>
                     <Text style={{ fontSize: 16, color: '#444', marginVertical: 10 }}>
@@ -187,16 +113,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginTop: 15,
         marginBottom: 30,
-    },
-    list: {
-        marginBottom: 15,
-    },
-    listItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginHorizontal: 15,
-        marginVertical: 10,
     },
     help: {
         justifyContent: 'space-between',
